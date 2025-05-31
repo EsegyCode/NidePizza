@@ -1,26 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="91b5b436-25e0-4411-be87-80b1f259a0b6" name="Changes" comment="" />
+    <list default="true" id="91b5b436-25e0-4411-be87-80b1f259a0b6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/main.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/fonts/ChakraPetch-Regular.otf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/fonts/HarreeghPoppedCyrillic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/bbq_chicken.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/bianka.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/california.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/dragon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/ebi_tempura.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/four_cheese.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/hawaiian.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/margherita.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/pepperoni.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/philadelphia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/pizza1.jfif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/pizza1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/pizza2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/pizza_logo.aseprite" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/pizza_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/spicy_tuna.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/vegetarian.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/veggie.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/about.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/add_product.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cart.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/checkout_success.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/orders.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/shop.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;EsegyCode&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:EsegyCode/NidePizza.git&quot;,
+    &quot;accountId&quot;: &quot;58113256-1bc3-43ed-83a7-228a9e0cbbb1&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2xroQmSLdET7uYC99dDQKqkIfmF" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

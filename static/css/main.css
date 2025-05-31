@@ -1,0 +1,144 @@
+@font-face {
+  font-family: 'ChakraPetch';
+  src: url('../fonts/ChakraPetch-Regular.otf') format('opentype');
+}
+
+body {
+  font-family: 'ChakraPetch', sans-serif;
+  background-color: #fff8e1;
+  color: #222;
+  font-size: 18px;
+}
+
+header span.fs-4 {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.nav-pills .nav-link {
+  font-size: 20px;
+  padding: 12px 20px;
+  margin: 0 5px;
+  background-color: #ff9800;
+  color: white;
+  border-radius: 12px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #e65100;
+}
+
+img {
+  width: 120px;
+  height: 120px;
+  margin-right: 10px;
+}
+
+.menu-button {
+  font-family: 'ChakraPetch', sans-serif;
+  font-size: 48px;
+  padding: 12px 36px;
+  margin: 5px;
+  background-color: #ff9800;
+  color: white !important;
+  border-radius: 12px;
+  border: none;
+  transition: background-color 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.menu-button:hover {
+  background-color: #e65100;
+  animation: bounce 0.4s ease;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.brand-name {
+  font-family: 'ChakraPetch', sans-serif;
+  font-size: 48px;           /* Увеличено с 36px */
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #d84315;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+header {
+  align-items: center;
+}
+
+header img {
+  width: 120px;
+  height: 120px;
+  margin-right: 20px; /* відступ праворуч для логотипа */
+  object-fit: contain;
+}
+
+.card-img-top {
+  width: 100%;          /* Заполнить ширину карточки */
+  height: 200px;        /* Фиксированная высота */
+  object-fit: cover;    /* Обрезать изображение, сохраняя пропорции */
+}
+
+.card {
+  font-family: 'ChakraPetch', sans-serif;
+  max-width: 350px; /* увеличиваем ширину карточки */
+
+}
+
+.card-price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #e65100;
+}
+
+.buy-button {
+  font-size: 1 rem !important;
+  padding: 16px 40px !important;
+  border-radius: 14px !important;
+  font-weight: 700 !important;
+}
+
+.btn {
+  font-size: 1.25rem;      /* Увеличить размер текста */
+  padding: 12px 30px;      /* Увеличить внутренние отступы (высоту и ширину) */
+  border-radius: 12px;     /* Сделать скругления, если надо */
+  font-weight: bold;       /* Сделать текст жирнее */
+}
+
+.btn-darkgray {
+  background-color: #FF8C00 !important;/* тёмно-серый */
+  color: white    !important;         /* текст белый, чтобы был виден */
+  border: none      !important;        /* убрать рамку, если надо */
+}
+
+.btn-darkgray:hover {
+  background-color: #555555; /* чуть светлее при наведении */
+}
+
+.products-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #dc3545 !important; /* красный */
+  color: white !important;
+}
+

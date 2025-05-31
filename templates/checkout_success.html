@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Order Completed{% endblock %}
+
+{% block content %}
+<h1>Thank you for your order!</h1>
+<p>Your order has been successfully placed.</p>
+<a href="{{ url_for('index') }}" class="btn btn-primary btn-darkgray">Back to Main Page</a>
+{% endblock %}

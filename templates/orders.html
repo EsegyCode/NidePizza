@@ -1,0 +1,14 @@
+<h1>Все заказы</h1>
+{% for order in orders %}
+  <h3>Заказ #{{ loop.index }}</h3>
+  <ul>
+    {% for item in order.items %}
+      <li>{{ item.name }} — количество: {{ item.quantity }}, сумма: {{ item.subtotal }} €</li>
+    {% endfor %}
+  </ul>
+  <p><strong>Итого: {{ order.total }} €</strong></p>
+  <hr>
+{% else %}
+  <p>Заказов пока нет.</p>
+{% endfor %}
+<a href="{{ url_for('index') }}">Вернуться на главную</a>

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Main page{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  {% for product in products %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 w-100">
+        <img src="{{ url_for('static', filename='img/' + product.image) }}" class="card-img-top" alt="{{ product.name }}">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-price">{{ product.price }} €</p>
+          <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
+            <button type="submit" class="btn btn-darkgray buy-button btn-buy">Add to Cart</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
