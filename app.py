@@ -1,16 +1,46 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import requests
+from flask_sqlalchemy import SQLAlchemy
+import os
+import re
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Токен бота и ID канала (замени на свои)
+# Telegram config
 TELEGRAM_BOT_TOKEN = '7551814443:AAHBCiY0Q_6Fygmuu8JELvfWYarII5_yV1Q'
 TELEGRAM_CHAT_ID = '-1002318381366'
 
-# Глобальный счетчик заказов
-order_counter = 0
+# DB config
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'shop.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
+# MODELS
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120))
+    description = db.Column(db.Text)
+    price = db.Column(db.Float)
+    image = db.Column(db.String(120))
+    category = db.Column(db.String(50))  # Pizza или Sushi
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    phone = db.Column(db.String(20))
+    total = db.Column(db.Float)
+    items = db.relationship('OrderItem', backref='order', lazy=True)
+
+class OrderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    product_id = db.Column(db.Integer)
+    name = db.Column(db.String(120))
+    quantity = db.Column(db.Integer)
+    subtotal = db.Column(db.Float)
+
+# INITIAL DATA
 products_pizza = [
     {"id": 1, "name": "Margherita Pizza", "description": "Thin crust, tomato sauce, mozzarella, fresh basil", "price": 10, "image": "margherita.png"},
     {"id": 2, "name": "Hawaiian Chicken", "description": "Thin crust, tomato sauce, mozzarella, pineapple, grilled chicken", "price": 12, "image": "hawaiian.png"},
@@ -29,34 +59,30 @@ products_sushi = [
     {"id": 106, "name": "Vegetarian Roll", "description": "Rice, nori, avocado, cucumber, carrot, tofu, sesame seeds", "price": 9.5, "image": "vegetarian.png"}
 ]
 
-all_products = products_pizza + products_sushi
-
-# Глобальный список для хранения заказов
-orders = []
-
+# TELEGRAM
 def send_telegram_message(message):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": TELEGRAM_CHAT_ID,
-        "text": message,
-        "parse_mode": "HTML"
-    }
+    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": message, "parse_mode": "HTML"}
     try:
         requests.post(url, data=payload)
     except Exception as e:
         print("Ошибка отправки в Telegram:", e)
 
+# ROUTES
 @app.route("/")
 def index():
-    return render_template("index.html", products=all_products, active_page='main')
+    products = Product.query.all()
+    return render_template("index.html", products=products, active_page='main')
 
 @app.route("/pizza")
 def pizza():
-    return render_template("shop.html", products=products_pizza, category="Pizza", active_page='pizza')
+    products = Product.query.filter_by(category="Pizza").all()
+    return render_template("shop.html", products=products, category="Pizza", active_page='pizza')
 
 @app.route("/sushi")
 def sushi():
-    return render_template("shop.html", products=products_sushi, category="Sushi", active_page='sushi')
+    products = Product.query.filter_by(category="Sushi").all()
+    return render_template("shop.html", products=products, category="Sushi", active_page='sushi')
 
 @app.route("/cart")
 def cart():
@@ -65,9 +91,9 @@ def cart():
     total = 0
 
     for product_id, quantity in cart.items():
-        product = next((p for p in all_products if p["id"] == int(product_id)), None)
+        product = Product.query.get(int(product_id))
         if product:
-            subtotal = product["price"] * quantity
+            subtotal = product.price * quantity
             total += subtotal
             cart_items.append({
                 "product": product,
@@ -82,7 +108,7 @@ def add_to_cart(product_id):
     cart = session.get("cart", {})
     cart[str(product_id)] = cart.get(str(product_id), 0) + 1
     session["cart"] = cart
-    return redirect(url_for("index"))
+    return redirect(request.referrer or url_for("index"))
 
 @app.route('/about')
 def about():
@@ -90,67 +116,72 @@ def about():
 
 @app.route('/checkout', methods=['POST'])
 def checkout():
-    global order_counter
-
     cart = session.get('cart', {})
     if not cart:
-        return redirect(url_for('cart'))  # корзина пустая, перенаправляем назад
+        return redirect(url_for('cart'))
 
     phone = request.form.get('phone', '').strip()
-    # Простая валидация номера (должен начинаться с + и содержать 7-15 цифр)
-    import re
     if not re.match(r'^\+\d{7,15}$', phone):
-        return "Invalid phone number format. Please use international format, e.g. +31612345678.", 400
+        return "Invalid phone number format. Use +31612345678.", 400
 
-    # Собираем детали заказа (продукты + кол-во)
-    order_items = []
+    order = Order(phone=phone, total=0)
+    db.session.add(order)
+
     total = 0
     for product_id, quantity in cart.items():
-        product = next((p for p in all_products if p["id"] == int(product_id)), None)
+        product = Product.query.get(int(product_id))
         if product:
-            subtotal = product["price"] * quantity
+            subtotal = product.price * quantity
             total += subtotal
-            order_items.append({
-                "product_id": product["id"],
-                "name": product["name"],
-                "quantity": quantity,
-                "subtotal": subtotal
-            })
+            db.session.add(OrderItem(
+                order=order,
+                product_id=product.id,
+                name=product.name,
+                quantity=quantity,
+                subtotal=subtotal
+            ))
 
-    order_counter += 1  # увеличиваем счетчик заказов
+    order.total = total
+    db.session.commit()
 
-    order = {
-        "order_number": order_counter,
-        "items": order_items,
-        "total": total,
-        "phone": phone
-    }
-
-    # Добавляем заказ в глобальный массив заказов
-    orders.append(order)
-
-    # Формируем сообщение для Telegram
+    # Telegram message
     msg_lines = [
-        f"<b>New Order #{order['order_number']}</b>",
-        f"Phone: {order['phone']}",
+        f"<b>New Order #{order.id}</b>",
+        f"Phone: {order.phone}",
         "Items:"
     ]
-    for item in order_items:
-        msg_lines.append(f"{item['name']} — Quantity: {item['quantity']}, Subtotal: {item['subtotal']} €")
-    msg_lines.append(f"<b>Total: {total} €</b>")
+    for item in order.items:
+        msg_lines.append(f"{item.name} — Quantity: {item.quantity}, Subtotal: {item.subtotal} €")
+    msg_lines.append(f"<b>Total: {order.total} €</b>")
+    send_telegram_message("\n".join(msg_lines))
 
-    message = "\n".join(msg_lines)
-    send_telegram_message(message)
-
-    # Очищаем корзину пользователя
     session.pop('cart', None)
-
     return render_template('checkout_success.html', order=order)
 
-# Новый маршрут для просмотра всех заказов
 @app.route('/orders')
 def show_orders():
+    orders = Order.query.order_by(Order.id.desc()).all()
     return render_template('orders.html', orders=orders)
 
+@app.route("/init_products")
+def init_products():
+    if Product.query.first():
+        return "Products already initialized."
+
+    for p in products_pizza:
+        db.session.add(Product(**p, category="Pizza"))
+    for s in products_sushi:
+        db.session.add(Product(**s, category="Sushi"))
+    db.session.commit()
+    return "Products added to DB"
+
+@app.route("/clear_products")
+def clear_products():
+    Product.query.delete()
+    db.session.commit()
+    return "All products deleted."
+
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
