@@ -5,38 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91b5b436-25e0-4411-be87-80b1f259a0b6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/main.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/fonts/ChakraPetch-Regular.otf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/fonts/HarreeghPoppedCyrillic.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/bbq_chicken.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/bianka.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/california.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/dragon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/ebi_tempura.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/four_cheese.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/hawaiian.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/margherita.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/pepperoni.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/philadelphia.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/pizza1.jfif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/pizza1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/pizza2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/pizza_logo.aseprite" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/pizza_logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/spicy_tuna.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/vegetarian.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/veggie.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/about.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/add_product.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cart.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/checkout_success.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/orders.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/shop.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cart.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

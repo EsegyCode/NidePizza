@@ -1,7 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+import requests
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+# Токен бота и ID канала (замени на свои)
+TELEGRAM_BOT_TOKEN = '7551814443:AAHBCiY0Q_6Fygmuu8JELvfWYarII5_yV1Q'
+TELEGRAM_CHAT_ID = '-1002318381366'
+
+# Глобальный счетчик заказов
+order_counter = 0
 
 products_pizza = [
     {"id": 1, "name": "Margherita Pizza", "description": "Thin crust, tomato sauce, mozzarella, fresh basil", "price": 10, "image": "margherita.png"},
@@ -25,6 +33,18 @@ all_products = products_pizza + products_sushi
 
 # Глобальный список для хранения заказов
 orders = []
+
+def send_telegram_message(message):
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    payload = {
+        "chat_id": TELEGRAM_CHAT_ID,
+        "text": message,
+        "parse_mode": "HTML"
+    }
+    try:
+        requests.post(url, data=payload)
+    except Exception as e:
+        print("Ошибка отправки в Telegram:", e)
 
 @app.route("/")
 def index():
@@ -70,9 +90,17 @@ def about():
 
 @app.route('/checkout', methods=['POST'])
 def checkout():
+    global order_counter
+
     cart = session.get('cart', {})
     if not cart:
         return redirect(url_for('cart'))  # корзина пустая, перенаправляем назад
+
+    phone = request.form.get('phone', '').strip()
+    # Простая валидация номера (должен начинаться с + и содержать 7-15 цифр)
+    import re
+    if not re.match(r'^\+\d{7,15}$', phone):
+        return "Invalid phone number format. Please use international format, e.g. +31612345678.", 400
 
     # Собираем детали заказа (продукты + кол-во)
     order_items = []
@@ -89,13 +117,30 @@ def checkout():
                 "subtotal": subtotal
             })
 
+    order_counter += 1  # увеличиваем счетчик заказов
+
     order = {
+        "order_number": order_counter,
         "items": order_items,
-        "total": total
+        "total": total,
+        "phone": phone
     }
 
     # Добавляем заказ в глобальный массив заказов
     orders.append(order)
+
+    # Формируем сообщение для Telegram
+    msg_lines = [
+        f"<b>New Order #{order['order_number']}</b>",
+        f"Phone: {order['phone']}",
+        "Items:"
+    ]
+    for item in order_items:
+        msg_lines.append(f"{item['name']} — Quantity: {item['quantity']}, Subtotal: {item['subtotal']} €")
+    msg_lines.append(f"<b>Total: {total} €</b>")
+
+    message = "\n".join(msg_lines)
+    send_telegram_message(message)
 
     # Очищаем корзину пользователя
     session.pop('cart', None)

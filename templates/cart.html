@@ -25,7 +25,21 @@
   </table>
   <h3>Total: {{ total }} €</h3>
 
-  <form action="{{ url_for('checkout') }}" method="post">
+  <form action="{{ url_for('checkout') }}" method="post" novalidate>
+    <div class="mb-3">
+      <label for="phone" class="form-label">Enter your phone number</label>
+      <input
+        type="tel"
+        class="form-control"
+        id="phone"
+        name="phone"
+        placeholder="+31612345678"
+        required
+        pattern="^\+\d{7,15}$"
+        title="Please enter a valid phone number starting with + and containing 7 to 15 digits"
+      >
+      <div class="form-text">Please enter your phone number in international format (e.g., +31 6 12345678).</div>
+    </div>
     <button type="submit" class="btn btn-primary btn-darkgray">Checkout</button>
   </form>
 {% else %}
