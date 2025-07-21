@@ -7,8 +7,8 @@
     <list default="true" id="91b5b436-25e0-4411-be87-80b1f259a0b6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/orders.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/orders.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shop.db" beforeDir="false" afterPath="$PROJECT_DIR$/shop.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/pizza_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/pizza_logo.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

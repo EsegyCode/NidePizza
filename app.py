@@ -6,6 +6,8 @@ import re
 import logging
 from datetime import datetime
 from mollie.api.client import Client as MollieClient
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 
 
@@ -14,6 +16,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+app.config['SERVER_NAME'] = '038398544130.ngrok-free.app'
+
 
 mollie = MollieClient()
 mollie.set_api_key("test_kSPVxjsPkJvzeWdreg7G85Dwdjmv5h")  # ТЕСТОВИЙ API-ключ
@@ -37,6 +42,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'sh
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+
 # MODELS
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -50,6 +56,9 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     phone = db.Column(db.String(20))
     total = db.Column(db.Float)
+    is_paid = db.Column(db.Boolean, default=False)  # 👈 добавим это
+    payment_id = db.Column(db.String(64), nullable=True)  # 👈 и это
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     items = db.relationship('OrderItem', backref='order', lazy=True)
 
 class OrderItem(db.Model):
@@ -59,6 +68,15 @@ class OrderItem(db.Model):
     name = db.Column(db.String(120))
     quantity = db.Column(db.Integer)
     subtotal = db.Column(db.Float)
+
+# Admin interface
+admin = Admin(app, name='Sushi Admin', template_mode='bootstrap4')
+
+# Добавляем модели в админку
+admin.add_view(ModelView(Product, db.session))
+admin.add_view(ModelView(Order, db.session))
+admin.add_view(ModelView(OrderItem, db.session))
+
 
 # INITIAL DATA
 products_sushi = [
@@ -149,6 +167,20 @@ def add_to_cart(product_id):
 def about():
     return render_template("about.html")
 
+@app.route("/admin/orders")
+def admin_orders():
+    orders = Order.query.order_by(Order.id.desc()).all()
+    output = []
+    for order in orders:
+        output.append(
+            f"<b>Заказ #{order.id}</b> | Телефон: {order.phone} | Сумма: {order.total} € | "
+            f"Оплачен: {order.is_paid} | Payment ID: {order.payment_id}"
+        )
+        for item in order.items:
+            output.append(f"&nbsp;&nbsp;&nbsp;&nbsp;- {item.name} x{item.quantity} = {item.subtotal} €")
+        output.append("<hr>")
+    return "<br>".join(output)
+
 @app.route('/checkout', methods=['POST'])
 def checkout():
     cart = session.get('cart', {})
@@ -228,13 +260,38 @@ def checkout():
 @app.route("/mollie_webhook", methods=["POST"])
 def mollie_webhook():
     payment_id = request.form.get("id")
+    if not payment_id:
+        return "Missing payment ID", 400
+
     payment = mollie.payments.get(payment_id)
 
     if payment.is_paid():
-        order_id = payment.metadata["order_id"]
+        order_id = payment.metadata.get("order_id")
         order = Order.query.get(order_id)
-        # Можно обновить статус в базе данных
-        print(f"Оплата подтверждена для заказа #{order.id}")
+
+        if order and not order.is_paid:
+            order.is_paid = True
+            order.payment_id = payment_id
+            db.session.commit()
+
+            print(f"[Webhook] Оплата подтверждена для заказа #{order.id}")
+
+            # ✅ Отправка сообщения в Telegram
+            msg_lines = [
+                f"<b>✅ Оплачен заказ #{order.id}</b>",
+                f"Телефон: {order.phone}",
+                "Товары:"
+            ]
+            for item in order.items:
+                msg_lines.append(f"{item.name} — {item.quantity} шт. = {item.subtotal} €")
+            msg_lines.append(f"<b>Итого: {order.total} €</b>")
+
+            send_telegram_message("\n".join(msg_lines))
+
+        else:
+            print("[Webhook] Заказ уже оплачен или не найден")
+    else:
+        print(f"[Webhook] Платёж не оплачен: {payment_id}")
 
     return "", 200
 
@@ -271,4 +328,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         print(">>> Flask is starting...")
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=8000)
