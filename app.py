@@ -127,15 +127,16 @@ def index():
     products = Product.query.all()
     return render_template("index.html", products=products, active_page='main')
 
-@app.route("/pizza")
-def pizza():
-    products = Product.query.filter_by(category="Pizza").all()
-    return render_template("shop.html", products=products, category="Pizza", active_page='pizza')
-
 @app.route("/sushi")
 def sushi():
     products = Product.query.filter_by(category="Sushi").all()
     return render_template("shop.html", products=products, category="Sushi", active_page='sushi')
+
+
+@app.route("/sushiset")
+def sushiset():
+    products = Product.query.filter_by(category="SushiSet").all()
+    return render_template("shop.html", products=products, category="SushiSet", active_page='sushiset')
 
 @app.route("/cart")
 def cart():
@@ -303,9 +304,9 @@ def init_products():
         return "Products already initialized."
 
     for p in products_sushi:
-        db.session.add(Product(**p, category="Pizza"))
+        db.session.add(Product(**p, category="Sushi"))  # sushi - обычные роллы
     for s in products_sushi_set:
-        db.session.add(Product(**s, category="Sushi"))
+        db.session.add(Product(**s, category="SushiSet"))  # сеты роллов
     db.session.commit()
     return "Products added to DB"
 

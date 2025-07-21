@@ -18,8 +18,8 @@
     </a>
     <ul class="nav nav-pills">
   <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link {% if active_page == 'main' %}active{% endif %}">Main page</a></li>
-  <li class="nav-item"><a href="{{ url_for('pizza') }}" class="nav-link {% if active_page == 'pizza' %}active{% endif %}">Sushi</a></li>
-  <li class="nav-item"><a href="{{ url_for('sushi') }}" class="nav-link {% if active_page == 'sushi' %}active{% endif %}">Sushi Set</a></li>
+  <li class="nav-item"><a href="{{ url_for('sushi') }}" class="nav-link {% if active_page == 'sushi' %}active{% endif %}">Sushi</a></li>
+  <li class="nav-item"><a href="{{ url_for('sushiset') }}" class="nav-link {% if active_page == 'sushiset' %}active{% endif %}">Sushi Set</a></li>
   <li class="nav-item"><a href="{{ url_for('about') }}" class="nav-link {% if active_page == 'about' %}active{% endif %}">About us</a></li>
   <li class="nav-item"><a href="{{ url_for('cart') }}" class="nav-link {% if active_page == 'cart' %}active{% endif %}">Cart</a></li>
 </ul>
