@@ -211,11 +211,10 @@ def checkout():
     order.total = total
     db.session.commit()
 
-    # Создаем платёж в Mollie
     payment = mollie.payments.create({
         "amount": {
             "currency": "EUR",
-            "value": f"{order.total:.2f}"  # сумма должна быть строкой, формат 10.00
+            "value": f"{order.total:.2f}"
         },
         "description": f"Order #{order.id}",
         "redirectUrl": url_for("payment_success", order_id=order.id, _external=True),
@@ -228,15 +227,7 @@ def checkout():
 
     session.pop('cart', None)
 
-    # Перенаправляем клиента на Mollie
     return redirect(payment.checkout_url)
-
-    # Telegram message
-    msg_lines = [
-        f"<b>New Order #{order.id}</b>",
-        f"Phone: {order.phone}",
-        "Items:"
-    ]
     for item in order.items:
         msg_lines.append(f"{item.name} — Quantity: {item.quantity}, Subtotal: {item.subtotal} €")
     msg_lines.append(f"<b>Total: {order.total} €</b>")
