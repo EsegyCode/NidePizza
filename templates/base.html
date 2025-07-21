@@ -14,12 +14,12 @@
   <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
       <img src="{{ url_for('static', filename='img/pizza_logo.png')}}" alt="">
-      <span class="brand-name">NidePizza</span>
+      <span class="brand-name">BigBiteSushi</span>
     </a>
     <ul class="nav nav-pills">
   <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link {% if active_page == 'main' %}active{% endif %}">Main page</a></li>
-  <li class="nav-item"><a href="{{ url_for('pizza') }}" class="nav-link {% if active_page == 'pizza' %}active{% endif %}">Pizza</a></li>
-  <li class="nav-item"><a href="{{ url_for('sushi') }}" class="nav-link {% if active_page == 'sushi' %}active{% endif %}">Sushi</a></li>
+  <li class="nav-item"><a href="{{ url_for('pizza') }}" class="nav-link {% if active_page == 'pizza' %}active{% endif %}">Sushi</a></li>
+  <li class="nav-item"><a href="{{ url_for('sushi') }}" class="nav-link {% if active_page == 'sushi' %}active{% endif %}">Sushi Set</a></li>
   <li class="nav-item"><a href="{{ url_for('about') }}" class="nav-link {% if active_page == 'about' %}active{% endif %}">About us</a></li>
   <li class="nav-item"><a href="{{ url_for('cart') }}" class="nav-link {% if active_page == 'cart' %}active{% endif %}">Cart</a></li>
 </ul>
