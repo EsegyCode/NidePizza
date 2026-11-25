@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section">
+  <div class="container prose">
+    <nav class="breadcrumbs"><a href="{{ url_for('main.index') }}">Home</a><span>/</span><span>Allergens &amp; Delivery</span></nav>
+    <span class="eyebrow">Food Safety &amp; Logistics</span>
+    <h1>Allergens &amp; Dual-Zone Delivery</h1>
+
+    <h2>Allergen Information</h2>
+    <p>Our kitchens handle wheat gluten, dairy (mozzarella, cream cheese, cheddar, parmesan), fish (salmon, tuna, eel), crustaceans (tiger shrimp), soy (unagi &amp; soy sauce), sesame seeds, and egg.</p>
+    <p>If you have a severe food allergy, please call {{ business_phone }} before placing your order so our kitchen can advise you.</p>
+
+    <h2>Dual-Zone Thermal Delivery</h2>
+    <p>Hot wood-fired pizzas are packed in breathable stone-hearth boxes inside a 70°C+ insulated compartment, while fresh sushi rolls are kept in a separate chilled compartment so raw fish and crisp nori arrive in peak condition.</p>
+  </div>
+</section>
+{% endblock %}

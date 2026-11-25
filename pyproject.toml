@@ -1,0 +1,25 @@
+[project]
+name = "nidepizza"
+version = "2.0.0"
+description = "NidePizza — Artisan Wood-Fired Pizza & Fresh Sushi e-commerce platform with SEO, GEO, dynamic OG images, JSON-LD, and llms.txt"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "Flask>=3.0.0",
+    "Flask-SQLAlchemy>=3.1.1",
+    "Flask-Admin>=1.6.1",
+    "requests>=2.32.0",
+    "mollie-api-python>=3.8.0",
+    "Pillow>=10.4.0",
+    "python-dotenv>=1.0.1",
+    "WTForms>=3.1.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

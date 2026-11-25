@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section">
+  <div class="container prose">
+    <nav class="breadcrumbs"><a href="{{ url_for('main.index') }}">Home</a><span>/</span><span>Terms &amp; Conditions</span></nav>
+    <span class="eyebrow">Legal</span>
+    <h1>Terms &amp; Conditions</h1>
+    <p>By placing an order through {{ brand_name }}, you agree to the following terms of service.</p>
+
+    <h2>1. Orders &amp; Pricing</h2>
+    <p>All prices are listed in Euros (€) inclusive of applicable Dutch VAT (9% food rate). Orders are confirmed once payment is authorized or accepted by our kitchen.</p>
+
+    <h2>2. Delivery Estimates</h2>
+    <p>Estimated delivery times (25–45 minutes depending on city) are targets and may vary slightly during peak evening hours or severe weather.</p>
+
+    <h2>3. Cancellations &amp; Refunds</h2>
+    <p>Because all pizzas and sushi rolls are prepared fresh to order, cancellations are only possible before kitchen preparation begins. If an item arrives damaged or incorrect, contact {{ business_phone }} within 2 hours for a replacement or refund.</p>
+  </div>
+</section>
+{% endblock %}

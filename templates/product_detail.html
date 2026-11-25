@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ url_for('main.index') }}">Home</a>
+      <span>/</span>
+      <a href="{{ url_for('main.menu') }}">Menu</a>
+      <span>/</span>
+      <a href="{{ url_for('main.menu', category_slug=cat_slug) }}">{{ product.category }}</a>
+      <span>/</span>
+      <span>{{ product.name }}</span>
+    </nav>
+
+    <div class="detail-grid">
+      <div class="detail-media">
+        <img src="{{ url_for('static', filename='img/' + product.image) }}" alt="{{ product.name }}">
+      </div>
+
+      <div class="detail-info">
+        <span class="eyebrow">{{ product.category }}{% if product.badge %} • {{ product.badge }}{% endif %}</span>
+        <h1>{{ product.name }}</h1>
+        <div class="detail-price">€{{ '%.2f'|format(product.price) }}</div>
+        <p style="font-size: 1.05rem; color: var(--text-muted);">{{ product.description }}</p>
+
+        <div class="detail-specs">
+          <span class="spec-chip">Portion: {{ product.weight or '300g' }}</span>
+          <span class="spec-chip">Prep: Made to order</span>
+          <span class="spec-chip">Delivery: 25–35 min</span>
+        </div>
+
+        <form action="{{ url_for('main.add_to_cart', product_id=product.id) }}" method="post" class="js-add-to-cart" style="display: flex; gap: 14px; flex-wrap: wrap;">
+          <button type="submit" class="btn btn-primary">Add to Cart — €{{ '%.2f'|format(product.price) }}</button>
+          <a href="{{ url_for('main.cart') }}" class="btn btn-outline">Go to Cart</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if related %}
+<section class="section section-stone">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Pair With</span>
+        <h2>More from {{ product.category }}</h2>
+      </div>
+    </div>
+    <div class="product-grid">
+      {% for product in related %}
+        {% include "_product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

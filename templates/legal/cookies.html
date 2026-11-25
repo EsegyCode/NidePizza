@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section">
+  <div class="container prose">
+    <nav class="breadcrumbs"><a href="{{ url_for('main.index') }}">Home</a><span>/</span><span>Cookie Policy</span></nav>
+    <span class="eyebrow">Legal</span>
+    <h1>Cookie Policy</h1>
+    <p>{{ brand_name }} uses strictly necessary session cookies so your shopping cart items persist while you browse the menu and complete checkout.</p>
+
+    <h2>Essential Cookies Only</h2>
+    <ul>
+      <li><strong>session</strong> — Stores your temporary cart items and quantities (HTTP-only, expires when your browser session ends).</li>
+    </ul>
+    <p>We do not sell personal data or run third-party advertising trackers.</p>
+  </div>
+</section>
+{% endblock %}

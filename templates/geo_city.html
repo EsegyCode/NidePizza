@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero" style="padding: 56px 0 64px;">
+  <div class="container">
+    <span class="eyebrow eyebrow-gold">{{ city.region }}, Netherlands • Postal {{ city.postal_prefixes }}</span>
+    <h1 style="max-width: 780px;">{{ city.headline }}</h1>
+    <p class="hero-lead">{{ city.summary }}</p>
+    <div class="hero-cta">
+      <a href="{{ url_for('main.menu') }}" class="btn btn-primary">Order Now in {{ city.name }}</a>
+      <a href="{{ url_for('geo.locations') }}" class="btn btn-outline-light">All Cities</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <strong>{{ city.delivery_time }}</strong>
+        <span>Average courier ETA</span>
+      </div>
+      <div class="stat-item">
+        <strong>{{ city.min_order }}</strong>
+        <span>Minimum order</span>
+      </div>
+      <div class="stat-item">
+        <strong>{{ city.delivery_fee }}</strong>
+        <span>Delivery fee</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">Neighborhoods Served</span>
+    <h2 style="font-size: 2rem; margin-bottom: 10px;">Where We Deliver in {{ city.name }}</h2>
+    <p style="color: var(--text-muted); max-width: 680px;">{{ city.local_note }}</p>
+    <div class="neighborhood-list">
+      {% for hood in city.neighborhoods %}
+      <span class="neighborhood-pill">{{ hood }}</span>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-stone">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Popular in {{ city.name }}</span>
+        <h2>Top Pizza &amp; Sushi Picks</h2>
+      </div>
+      <a href="{{ url_for('main.menu') }}" class="btn btn-dark">Full Menu</a>
+    </div>
+    <div class="product-grid">
+      {% for product in featured %}
+        {% include "_product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if city.faqs %}
+<section class="section">
+  <div class="container" style="max-width: 840px;">
+    <span class="eyebrow">Local FAQ</span>
+    <h2 style="font-size: 2rem; margin-bottom: 24px;">Frequently Asked Questions — {{ city.name }}</h2>
+    <div class="faq-list">
+      {% for faq in city.faqs %}
+      <div class="faq-item">
+        <h3>{{ faq.q }}</h3>
+        <p>{{ faq.a }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

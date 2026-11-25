@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ url_for('main.index') }}">Home</a>
+      <span>/</span>
+      <span>Delivery Locations</span>
+    </nav>
+
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Netherlands Coverage</span>
+        <h1 style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 10px;">Delivery Cities &amp; Local Kitchens</h1>
+        <p>Select your city for local delivery times, neighborhood coverage, and minimum order details.</p>
+      </div>
+    </div>
+
+    <div class="city-grid">
+      {% for city in cities %}
+      <a href="{{ url_for('geo.city_landing', city_slug=city.slug) }}" class="city-card">
+        <div class="city-meta">
+          <span>{{ city.delivery_time }}</span>
+          <span>•</span>
+          <span>Min {{ city.min_order }}</span>
+          <span>•</span>
+          <span>{{ city.delivery_fee }}</span>
+        </div>
+        <h3>{{ city.name }} ({{ city.region }})</h3>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 12px;">{{ city.summary }}</p>
+        <span style="font-weight: 700; color: var(--accent-ember); font-size: 0.9rem;">View {{ city.name }} Menu &amp; Zones →</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,31 +1,142 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <title>{% block title %}{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ seo.title if seo and seo.title else brand_name }}</title>
+  <meta name="description" content="{{ seo.description if seo and seo.description else 'Artisan wood-fired pizza and fresh hand-rolled sushi delivered across the Netherlands.' }}">
+  <meta name="robots" content="{{ seo.robots if seo and seo.robots else 'index, follow' }}">
+  {% if seo and seo.canonical %}
+  <link rel="canonical" href="{{ seo.canonical }}">
+  {% endif %}
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="{{ brand_name }}">
+  <meta property="og:type" content="{{ seo.og_type if seo and seo.og_type else 'website' }}">
+  <meta property="og:title" content="{{ seo.title if seo and seo.title else brand_name }}">
+  <meta property="og:description" content="{{ seo.description if seo and seo.description else 'Wood-fired Neapolitan pizza & fresh hand-rolled sushi.' }}">
+  {% if seo and seo.canonical %}
+  <meta property="og:url" content="{{ seo.canonical }}">
+  {% endif %}
+  {% if seo and seo.og_image %}
+  <meta property="og:image" content="{{ seo.og_image }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  {% endif %}
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ seo.title if seo and seo.title else brand_name }}">
+  <meta name="twitter:description" content="{{ seo.description if seo and seo.description else 'Wood-fired Neapolitan pizza & fresh hand-rolled sushi.' }}">
+  {% if seo and seo.og_image %}
+  <meta name="twitter:image" content="{{ seo.og_image }}">
+  {% endif %}
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pizza_logo.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+  {% if schemas %}
+    {% for schema in schemas %}
+    <script type="application/ld+json">{{ schema | to_jsonld | safe }}</script>
+    {% endfor %}
+  {% endif %}
 </head>
 <body>
-<div class="container">
-  <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-      <img src="{{ url_for('static', filename='img/pizza_logo.png')}}" alt="">
-      <span class="brand-name">BigBiteSushi</span>
-    </a>
-    <ul class="nav nav-pills">
-  <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link {% if active_page == 'main' %}active{% endif %}">Main page</a></li>
-  <li class="nav-item"><a href="{{ url_for('sushi') }}" class="nav-link {% if active_page == 'sushi' %}active{% endif %}">Sushi</a></li>
-  <li class="nav-item"><a href="{{ url_for('sushiset') }}" class="nav-link {% if active_page == 'sushiset' %}active{% endif %}">Sushi Set</a></li>
-  <li class="nav-item"><a href="{{ url_for('about') }}" class="nav-link {% if active_page == 'about' %}active{% endif %}">About us</a></li>
-  <li class="nav-item"><a href="{{ url_for('cart') }}" class="nav-link {% if active_page == 'cart' %}active{% endif %}">Cart</a></li>
-</ul>
+  <header class="site-header">
+    <div class="container nav-inner">
+      <a href="{{ url_for('main.index') }}" class="brand-link">
+        <img src="{{ url_for('static', filename='img/pizza_logo.png') }}" alt="{{ brand_name }} logo" class="brand-logo">
+        <span class="brand-wordmark">
+          <span class="brand-title">{{ brand_name }}</span>
+          <span class="brand-sub">Pizza &amp; Sushi House</span>
+        </span>
+      </a>
+
+      <ul class="nav-links" id="primary-nav-links">
+        <li><a href="{{ url_for('main.index') }}" class="{% if active_page == 'main' %}active{% endif %}">Home</a></li>
+        <li><a href="{{ url_for('main.menu') }}" class="{% if active_page == 'menu' %}active{% endif %}">Full Menu</a></li>
+        <li><a href="{{ url_for('main.menu', category_slug='pizza') }}" class="{% if active_page == 'pizza' %}active{% endif %}">Pizza</a></li>
+        <li><a href="{{ url_for('main.menu', category_slug='sushi') }}" class="{% if active_page == 'sushi' %}active{% endif %}">Sushi</a></li>
+        <li><a href="{{ url_for('main.menu', category_slug='sushi-sets') }}" class="{% if active_page == 'sushi-sets' %}active{% endif %}">Sushi Sets</a></li>
+        <li><a href="{{ url_for('geo.locations') }}" class="{% if active_page == 'locations' %}active{% endif %}">Locations</a></li>
+        <li><a href="{{ url_for('main.about') }}" class="{% if active_page == 'about' %}active{% endif %}">About</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="{{ url_for('main.cart') }}" class="cart-pill" aria-label="View shopping cart">
+          <span>Cart</span>
+          <span class="cart-badge" id="nav-cart-count">{{ cart_count }}</span>
+        </a>
+        <button class="mobile-toggle" id="mobile-nav-toggle" type="button" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
   </header>
 
-  {% block content %}{% endblock %}
-</div>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">{{ brand_name }} — Amsterdam &amp; NL</div>
+          <p style="font-size: 0.9rem; margin: 0 0 12px;">
+            Wood-fired 48-hour sourdough Neapolitan pizza and sashimi-grade hand-rolled sushi, delivered in dual-zone thermal boxes.
+          </p>
+          <p style="font-size: 0.86rem; margin: 0;">
+            Keizersgracht 412, 1016 GC Amsterdam<br>
+            Open {{ opening_hours }} • {{ business_phone }}
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-title">Menu</div>
+          <ul class="footer-links">
+            <li><a href="{{ url_for('main.menu') }}">All Dishes</a></li>
+            <li><a href="{{ url_for('main.menu', category_slug='pizza') }}">Wood-Fired Pizza</a></li>
+            <li><a href="{{ url_for('main.menu', category_slug='sushi') }}">Fresh Sushi Rolls</a></li>
+            <li><a href="{{ url_for('main.menu', category_slug='sushi-sets') }}">Chef Sushi Sets</a></li>
+            <li><a href="{{ url_for('main.about') }}">Our Kitchen Story</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">Delivery Cities</div>
+          <ul class="footer-links">
+            <li><a href="{{ url_for('geo.city_landing', city_slug='amsterdam') }}">Amsterdam</a></li>
+            <li><a href="{{ url_for('geo.city_landing', city_slug='rotterdam') }}">Rotterdam</a></li>
+            <li><a href="{{ url_for('geo.city_landing', city_slug='utrecht') }}">Utrecht</a></li>
+            <li><a href="{{ url_for('geo.city_landing', city_slug='den-haag') }}">Den Haag</a></li>
+            <li><a href="{{ url_for('geo.city_landing', city_slug='haarlem') }}">Haarlem</a></li>
+            <li><a href="{{ url_for('geo.city_landing', city_slug='eindhoven') }}">Eindhoven</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-title">Legal &amp; Info</div>
+          <ul class="footer-links">
+            <li><a href="{{ url_for('legal.privacy') }}">Privacy Policy (GDPR)</a></li>
+            <li><a href="{{ url_for('legal.terms') }}">Terms &amp; Conditions</a></li>
+            <li><a href="{{ url_for('legal.cookies') }}">Cookie Policy</a></li>
+            <li><a href="{{ url_for('legal.allergens_delivery') }}">Allergens &amp; Delivery</a></li>
+            <li><a href="{{ url_for('seo.sitemap_xml') }}">Sitemap XML</a></li>
+            <li><a href="{{ url_for('seo.llms_txt') }}">llms.txt (AI Index)</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 {{ brand_name }}. All rights reserved.</span>
+        <span>Secure checkout powered by Mollie (iDEAL, Apple Pay, Cards)</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="nide-toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
 </body>
 </html>

@@ -1,48 +1,106 @@
 {% extends "base.html" %}
 
-{% block title %}Your Cart{% endblock %}
-
 {% block content %}
-<h1>Your Cart</h1>
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">Checkout</span>
+    <h1 style="font-size: clamp(2rem, 3.8vw, 2.8rem); margin-bottom: 28px;">Your Order Cart</h1>
 
-{% if cart_items %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Product</th><th>Quantity</th><th>Price</th><th>Subtotal</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in cart_items %}
-      <tr>
-        <td>{{ item.product.name }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>{{ item.product.price }} €</td>
-        <td>{{ item.subtotal }} €</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <h3>Total: {{ total }} €</h3>
+    {% if error %}
+      <div class="alert-error">{{ error }}</div>
+    {% endif %}
 
-  <form action="{{ url_for('checkout') }}" method="post" novalidate>
-    <div class="mb-3">
-      <label for="phone" class="form-label">Enter your phone number</label>
-      <input
-        type="tel"
-        class="form-control"
-        id="phone"
-        name="phone"
-        placeholder="+31612345678"
-        required
-        pattern="^\+\d{7,15}$"
-        title="Please enter a valid phone number starting with + and containing 7 to 15 digits"
-      >
-      <div class="form-text">Please enter your phone number in international format (e.g., +31 6 12345678).</div>
+    {% if cart_items %}
+    <div class="cart-layout">
+      <div class="panel">
+        <h2 style="font-size: 1.35rem; margin-bottom: 8px;">Selected Dishes</h2>
+        {% for item in cart_items %}
+        <div class="cart-row">
+          <div class="cart-item-info">
+            <img src="{{ url_for('static', filename='img/' + item.product.image) }}" alt="{{ item.product.name }}">
+            <div>
+              <strong style="display: block;">{{ item.product.name }}</strong>
+              <span style="font-size: 0.86rem; color: var(--text-muted);">€{{ '%.2f'|format(item.product.price) }} each</span>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div class="qty-controls">
+              <form action="{{ url_for('main.update_cart', product_id=item.product.id) }}" method="post">
+                <input type="hidden" name="action" value="dec">
+                <button type="submit" class="qty-btn" aria-label="Decrease quantity">−</button>
+              </form>
+              <span style="font-weight: 700; min-width: 20px; text-align: center;">{{ item.quantity }}</span>
+              <form action="{{ url_for('main.update_cart', product_id=item.product.id) }}" method="post">
+                <input type="hidden" name="action" value="inc">
+                <button type="submit" class="qty-btn" aria-label="Increase quantity">+</button>
+              </form>
+            </div>
+            <strong style="min-width: 72px; text-align: right;">€{{ '%.2f'|format(item.subtotal) }}</strong>
+            <form action="{{ url_for('main.update_cart', product_id=item.product.id) }}" method="post">
+              <input type="hidden" name="action" value="remove">
+              <button type="submit" class="btn btn-outline btn-sm" aria-label="Remove item">×</button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="panel">
+        <h2 style="font-size: 1.35rem; margin-bottom: 18px;">Delivery &amp; Payment</h2>
+        <form action="{{ url_for('main.checkout') }}" method="post">
+          <div class="form-group">
+            <label for="customer_name" class="form-label">Your Name</label>
+            <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="e.g. Emma van Dijk">
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone Number (Required) *</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="phone"
+              name="phone"
+              placeholder="+31612345678"
+              required
+              pattern="^\+\d{7,15}$"
+              title="International format starting with + and 7–15 digits"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="delivery_city" class="form-label">City</label>
+            <select class="form-control" id="delivery_city" name="delivery_city">
+              {% for city in cities %}
+              <option value="{{ city.name }}">{{ city.name }} ({{ city.delivery_time }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="delivery_address" class="form-label">Street &amp; House Number</label>
+            <input type="text" class="form-control" id="delivery_address" name="delivery_address" placeholder="Keizersgracht 412, 1016 GC">
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 700; margin: 20px 0;">
+            <span>Total</span>
+            <span style="color: var(--accent-ember);">€{{ '%.2f'|format(total) }}</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Pay &amp; Place Order</button>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin: 12px 0 0; text-align: center;">
+            By ordering you agree to our <a href="{{ url_for('legal.terms') }}" style="text-decoration: underline;">Terms</a> &amp; <a href="{{ url_for('legal.privacy') }}" style="text-decoration: underline;">Privacy Policy</a>.
+          </p>
+        </form>
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary btn-darkgray">Checkout</button>
-  </form>
-{% else %}
-  <p>Your cart is empty.</p>
-{% endif %}
+    {% else %}
+    <div class="panel" style="text-align: center; padding: 56px 24px;">
+      <h2 style="margin-bottom: 10px;">Your cart is empty</h2>
+      <p style="color: var(--text-muted); margin-bottom: 24px;">Add wood-fired pizzas or fresh sushi rolls to start your order.</p>
+      <a href="{{ url_for('main.menu') }}" class="btn btn-primary">Browse the Menu</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
 {% endblock %}

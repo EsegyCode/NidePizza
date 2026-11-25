@@ -1,25 +1,130 @@
 {% extends "base.html" %}
 
-{% block title %}Main page{% endblock %}
-
 {% block content %}
-
-<div class="row">
-  {% for product in products %}
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 w-100">
-        <img src="{{ url_for('static', filename='img/' + product.image) }}" class="card-img-top" alt="{{ product.name }}">
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title">{{ product.name }}</h5>
-          <p class="card-text">{{ product.description }}</p>
-          <p class="card-price">{{ product.price }} €</p>
-          <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
-            <button type="submit" class="btn btn-darkgray buy-button btn-buy">Add to Cart</button>
-          </form>
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow eyebrow-gold">Amsterdam &amp; Randstad • Open 11:00–23:00</span>
+      <h1>Wood-Fired <em>Pizza</em> &amp; Hand-Rolled <em>Sushi</em>, One Table.</h1>
+      <p class="hero-lead">
+        48-hour fermented Neapolitan sourdough baked at 450°C alongside sashimi-grade Norwegian salmon rolls.
+        Delivered together in dual-zone thermal boxes in 25–35 minutes.
+      </p>
+      <div class="hero-cta">
+        <a href="{{ url_for('main.menu') }}" class="btn btn-primary">Explore Full Menu</a>
+        <a href="{{ url_for('geo.locations') }}" class="btn btn-outline-light">Check Delivery Cities</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <strong>450°C</strong>
+          <span>Stone-hearth oven</span>
+        </div>
+        <div class="stat-item">
+          <strong>25–35 min</strong>
+          <span>Dual-zone e-bike delivery</span>
+        </div>
+        <div class="stat-item">
+          <strong>iDEAL</strong>
+          <span>Instant Mollie checkout</span>
         </div>
       </div>
     </div>
-  {% endfor %}
-</div>
 
+    <div class="hero-visual">
+      <div class="hero-photo-frame">
+        <img src="{{ url_for('static', filename='img/pizza1.jpg') }}" alt="Wood-fired Neapolitan pizza fresh from the NidePizza oven">
+      </div>
+      <div class="hero-float-card">
+        <img src="{{ url_for('static', filename='img/dragon.png') }}" alt="Dragon Unagi Roll">
+        <div>
+          <strong>Chef's Pairing</strong>
+          <span>Pepperoni Diavola + Dragon Unagi Roll</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Three Kitchens, One Order</span>
+        <h2>Browse by Craft</h2>
+        <p>Mix crispy Italian sourdough pies with fresh Japanese maki and signature rolls in a single checkout.</p>
+      </div>
+      <a href="{{ url_for('main.menu') }}" class="btn btn-outline">View All Dishes →</a>
+    </div>
+
+    <div class="category-grid">
+      <a href="{{ url_for('main.menu', category_slug='pizza') }}" class="category-card">
+        <img src="{{ url_for('static', filename='img/pepperoni.png') }}" alt="Wood-Fired Pizza">
+        <div>
+          <h3>Wood-Fired Pizza</h3>
+          <p>{{ counts.pizza }} sourdough recipes</p>
+        </div>
+      </a>
+      <a href="{{ url_for('main.menu', category_slug='sushi') }}" class="category-card">
+        <img src="{{ url_for('static', filename='img/1.png') }}" alt="Fresh Sushi Rolls">
+        <div>
+          <h3>Fresh Sushi</h3>
+          <p>{{ counts.sushi }} classic &amp; futomaki rolls</p>
+        </div>
+      </a>
+      <a href="{{ url_for('main.menu', category_slug='sushi-sets') }}" class="category-card">
+        <img src="{{ url_for('static', filename='img/philadelphia.png') }}" alt="Signature Sushi Sets">
+        <div>
+          <h3>Signature Rolls</h3>
+          <p>{{ counts.sets }} chef specialties</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-stone">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Most Ordered</span>
+        <h2>Featured on Tonight's Table</h2>
+        <p>Hand-picked favorites from our pizzaolo and sushi master.</p>
+      </div>
+      <a href="{{ url_for('main.menu') }}" class="btn btn-dark">Order Now</a>
+    </div>
+
+    <div class="product-grid">
+      {% for product in featured %}
+        {% include "_product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Local Delivery (NL)</span>
+        <h2>Delivering Hot &amp; Chilled Across 6 Dutch Cities</h2>
+        <p>Dedicated local kitchens and electric couriers keep pizza crisp and sushi chilled.</p>
+      </div>
+      <a href="{{ url_for('geo.locations') }}" class="btn btn-outline">All Delivery Zones →</a>
+    </div>
+
+    <div class="city-grid">
+      {% for city in cities %}
+      <a href="{{ url_for('geo.city_landing', city_slug=city.slug) }}" class="city-card">
+        <div class="city-meta">
+          <span>{{ city.delivery_time }}</span>
+          <span>•</span>
+          <span>{{ city.delivery_fee }}</span>
+        </div>
+        <h3>{{ city.name }}</h3>
+        <p style="margin: 0; color: var(--text-muted); font-size: 0.92rem;">{{ city.local_note }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 {% endblock %}

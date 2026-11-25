@@ -1,14 +1,31 @@
-<h1>Все заказы</h1>
-{% for order in orders %}
-  <h3>Заказ #{{ loop.index }}</h3>
-  <ul>
-    {% for item in order.items %}
-      <li>{{ item.name }} — количество: {{ item.quantity }}, сумма: {{ item.subtotal }} €</li>
+{% extends "base.html" %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">Kitchen Operations</span>
+    <h1 style="margin-bottom: 24px;">Recent Orders</h1>
+    {% for order in orders %}
+    <div class="panel" style="margin-bottom: 18px;">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+        <strong>Order #{{ order.id }} — {{ order.phone }}</strong>
+        <span>
+          {% if order.is_paid %}
+            <span class="neighborhood-pill" style="background: rgba(62, 98, 73, 0.14); color: var(--accent-matcha);">Paid</span>
+          {% else %}
+            <span class="neighborhood-pill">Pending / Local</span>
+          {% endif %}
+        </span>
+      </div>
+      <ul style="margin: 0 0 12px; padding-left: 20px; color: var(--text-muted);">
+        {% for item in order.items %}
+        <li>{{ item.name }} × {{ item.quantity }} — €{{ '%.2f'|format(item.subtotal) }}</li>
+        {% endfor %}
+      </ul>
+      <strong>Total: €{{ '%.2f'|format(order.total) }}</strong>
+    </div>
+    {% else %}
+    <div class="panel"><p style="margin: 0; color: var(--text-muted);">No orders recorded yet.</p></div>
     {% endfor %}
-  </ul>
-  <p><strong>Итого: {{ order.total }} €</strong></p>
-  <hr>
-{% else %}
-  <p>Заказов пока нет.</p>
-{% endfor %}
-<a href="{{ url_for('index') }}">Вернуться на главную</a>
+  </div>
+</section>
+{% endblock %}

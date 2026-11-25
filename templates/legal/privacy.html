@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section">
+  <div class="container prose">
+    <nav class="breadcrumbs"><a href="{{ url_for('main.index') }}">Home</a><span>/</span><span>Privacy Policy</span></nav>
+    <span class="eyebrow">Legal &amp; GDPR</span>
+    <h1>Privacy Policy</h1>
+    <p>Effective Date: November 2026 • Controller: {{ brand_name }} B.V., Keizersgracht 412, 1016 GC Amsterdam, Netherlands.</p>
+
+    <h2>1. Data We Collect</h2>
+    <p>When you place an order, we collect your phone number, optional name, delivery address, city, and ordered items solely to prepare and deliver your food and send order status updates.</p>
+
+    <h2>2. Payment Processing</h2>
+    <p>All online payments (iDEAL, Apple Pay, credit/debit cards) are processed securely via Mollie B.V. NidePizza never stores your card or bank account details.</p>
+
+    <h2>3. Data Retention &amp; Your Rights</h2>
+    <p>Under EU GDPR, you have the right to access, correct, or request deletion of your order contact data at any time by emailing <a href="mailto:{{ business_email }}" style="text-decoration: underline;">{{ business_email }}</a>.</p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ url_for('main.index') }}">Home</a>
+      <span>/</span>
+      <span>Menu</span>
+      {% if category_key != 'all' %}
+        <span>/</span>
+        <span>{{ meta.title }}</span>
+      {% endif %}
+    </nav>
+
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">{{ meta.eyebrow }}</span>
+        <h1 style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 10px;">{{ meta.title }}</h1>
+        <p>{{ meta.description }}</p>
+      </div>
+    </div>
+
+    <div class="filter-tabs" role="navigation" aria-label="Menu Categories">
+      <a href="{{ url_for('main.menu') }}" class="filter-tab {% if category_key == 'all' %}active{% endif %}">All Dishes</a>
+      <a href="{{ url_for('main.menu', category_slug='pizza') }}" class="filter-tab {% if category_key == 'pizza' %}active{% endif %}">Wood-Fired Pizza</a>
+      <a href="{{ url_for('main.menu', category_slug='sushi') }}" class="filter-tab {% if category_key == 'sushi' %}active{% endif %}">Fresh Sushi</a>
+      <a href="{{ url_for('main.menu', category_slug='sushi-sets') }}" class="filter-tab {% if category_key == 'sushi-sets' %}active{% endif %}">Signature Rolls</a>
+    </div>
+
+    <div class="product-grid">
+      {% for product in products %}
+        {% include "_product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
